@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>দেশি ভিডিও বক্স গ্যালারি</title>
+    
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .top-header {
+            background-color: #000000;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-area {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .logo-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 0;
+            position: relative;
+            display: inline-block;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        .logo-text span {
+            color: #ff006e;
+            font-style: normal;
+        }
+        .logo-text::after {
+            content: '🔥';
+            font-size: 20px;
+            position: absolute;
+            top: -5px;
+            right: -10px;
+        }
+        .search-container, .action-buttons {
+            padding: 15px 20px;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+        #searchInput {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+            font-size: 16px;
+        }
+        .search-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff006e;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .action-btn {
+            flex-grow: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+        }
+        .telegram-btn {
+            background-color: #0088cc;
+        }
+        .whatsapp-btn {
+            background-color: #25d366;
+        }
+        .menu-icon {
+            font-size: 30px;
+            padding: 10px 20px 0;
+            cursor: pointer;
+        }
+        .notice-block {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            padding: 15px;
+            margin: 20px;
+            border-left: 5px solid #ff006e;
+            display: flex;
+            align-items: flex-start;
+            border-radius: 4px;
+        }
+        .notice-block .icon {
+            color: #ff006e;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .latest-releases {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff006e;
+        }
+        .latest-releases .fire {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .video-item {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.5), 0 0 20px rgba(255, 0, 110, 0.2);
+            transition: transform 0.2s;
+        }
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.8), 0 0 30px rgba(255, 0, 110, 0.4);
+        }
+        .video-link {
+            display: block;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+        .thumbnail-image {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+        .title-container {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 10px;
+            text-align: center;
+        }
+        .video-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-header">
+        <a href="#" style="color: white; text-decoration: none;">🏠</a>
+        <span style="font-size: 18px;">ⓘ DESHI VIDEO BOX</span>
+        <div style="display: flex; gap: 10px;">
+            <span>20</span>
+            <span>⋮</span>
+        </div>
+    </div>
+
+    <div class="logo-area">
+        <p class="logo-text">DESHI <span>VIDEO BOX</span></p>
+    </div>
+
+    <div class="search-container">
+        <form class="search-form" onsubmit="event.preventDefault(); filterVideos();">
+            <input type="text" id="searchInput" placeholder="Search ..." onkeyup="filterVideos()">
+            <button class="search-btn" type="button" onclick="filterVideos()">SEARCH</button>
+        </form>
+    </div>
+
+    <div class="action-buttons">
+        <a href="TELEGRAM_LINK" class="action-btn telegram-btn" target="_blank">
+            <span style="margin-right: 5px;">✈️</span> JOIN TELEGRAM
+        </a>
+        <a href="WHATSAPP_GROUP_LINK" class="action-btn whatsapp-btn" target="_blank">
+            JOIN WHATSAPP <span style="margin-left: 5px;">📞</span>
+        </a>
+    </div>
+
+    <div class="menu-icon">
+        &#9776;
+    </div>
+
+    <div class="notice-block">
+        <span class="icon">ⓘ</span>
+        <p style="margin: 0;">
+            নতুন নতুন ভাইরাল বিডিও সবার আগে পেতে আমাদের ওয়েবসাইট ভিজিট করুন এবং চাইলে আমাদের টেলিগ্রাম অথবা হোয়াটসঅ্যাপ জয়েন্ট হতে পারেন ☺️ ধন্যবাদ! 
+        </p>
+    </div>
+
+    <div class="latest-releases">
+        <span class="fire">🔥</span> Latest Releases
+    </div>
+
+    <div class="video-gallery" id="videoGallery">
+        
+        <div class="video-item" data-title="ভিডিও ১: নতুন ভাইরাল ক্লিপ">
+            <a href="ভিডিও_লিংক_১" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+1" alt="ভিডিও ১" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ১: নতুন ভাইরাল ক্লিপ</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ২: সেক্সি হাসির ভিডিও">
+            <a href="ভিডিও_লিংক_২" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+2" alt="ভিডিও ২" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ২: সেক্সি হাসির ভিডিও</p>
+            </div>
+        </div>
+
+        <div class="video-item" data-title="ভিডিও ৩: হট শর্ট মুভি">
+            <a href="ভিডিও_লিংক_৩" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+3" alt="ভিডিও ৩" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৩: হট শর্ট মুভি</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৪: টপ মডেল নতুন রিলিজ">
+            <a href="ভিডিও_লিংক_৪" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+4" alt="ভিডিও ৪" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৪: টপ মডেল নতুন রিলিজ</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৫: গোপন ক্যামেরা ক্লিপ">
+            <a href="ভিডিও_লিংক_৫" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+5" alt="ভিডিও ৫" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৫: গোপন ক্যামেরা ক্লিপ</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৬: ভাইরাল লুকানো দৃশ্য">
+            <a href="ভিডিও_লিংক_৬" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+6" alt="ভিডিও ৬" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৬: ভাইরাল লুকানো দৃশ্য</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৭: নিউ অ্যাডাল্ট কমেডি">
+            <a href="ভিডিও_লিংক_৭" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+7" alt="ভিডিও ৭" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৭: নিউ অ্যাডাল্ট কমেডি</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৮: গরম ভিডিও ক্লিপ">
+            <a href="ভিডিও_লিংক_৮" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+8" alt="ভিডিও ৮" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৮: গরম ভিডিও ক্লিপ</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ৯: টিনএজ সিক্রেট">
+            <a href="ভিডিও_লিংক_৯" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+9" alt="ভিডিও ৯" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ৯: টিনএজ সিক্রেট</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ১০: আনসেন্সরড মুভি দৃশ্য">
+            <a href="ভিডিও_লিংক_১০" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+10" alt="ভিডিও ১০" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ১০: আনসেন্সরড মুভি দৃশ্য</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ১১: কলেজ গার্লস ফান">
+            <a href="ভিডিও_লিংক_১১" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+11" alt="ভিডিও ১১" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ১১: কলেজ গার্লস ফান</p>
+            </div>
+        </div>
+        
+        <div class="video-item" data-title="ভিডিও ১২: পার্টি ক্লিপস">
+            <a href="ভিডিও_লিংক_১২" target="_blank" class="video-link">
+                <img src="https://via.placeholder.com/300x450?text=DESHI+VIDEO+12" alt="ভিডিও ১২" class="thumbnail-image">
+            </a>
+            <div class="title-container">
+                 <p class="video-title">ভিডিও ১২: পার্টি ক্লিপস</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        function filterVideos() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const videoItems = document.querySelectorAll('.video-item');
+
+            videoItems.forEach(item => {
+                const title = item.getAttribute('data-title').toLowerCase();
+
+                if (title.includes(searchInput)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
