@@ -7,14 +7,14 @@
     
     <!-- Open Graph (OG) Meta Tags -->
     <meta property="og:type" content="website">
-    <meta id="ogTitle" property="og:title" content="Premium Hot Reels - Click to Watch Full Video">
-    <meta id="ogDesc" property="og:description" content="Click here to watch this viral trending reel in full high quality. Playback active inside the app.">
-    <meta id="ogImage" property="og:image" content="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080">
+    <meta property="og:title" content="Premium Hot Reels - Click to Watch Full Video">
+    <meta property="og:description" content="Click here to watch this viral trending reel in full high quality. Playback active inside the app.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -60,13 +60,15 @@
             width: 100%;
             overflow-y: scroll; 
             scroll-snap-type: y mandatory;
-            scroll-behavior: smooth; 
+            scroll-behavior: auto; 
             -webkit-overflow-scrolling: touch;
+            will-change: scroll-position;
         }
         .reels-container::-webkit-scrollbar { 
             display: none; 
         }
 
+        /* Hardware Accelerated Smooth Transition Wrapper */
         .reel-wrapper {
             height: calc(100vh - 65px); 
             height: calc(100dvh - 65px); 
@@ -78,6 +80,9 @@
             display: flex; 
             align-items: center; 
             justify-content: center;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
         }
 
         .media-container {
@@ -94,6 +99,7 @@
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
+            contain: content;
         }
 
         .click-capture {
@@ -281,32 +287,68 @@
             color: var(--accent);
         }
 
-        /* Content details */
+        /* Content details - Clean Shadow Layout */
         .content-details { 
             position: absolute; 
-            bottom: 70px; 
+            bottom: 75px; 
             left: 18px; 
             z-index: 40; 
-            max-width: 70%; 
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            max-width: 72%; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
         }
         .content-details h2 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 2px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
         }
+        
         .content-details .video-title {
-            font-size: 13px;
-            color: #e5e5e5;
-            font-weight: 400;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 500;
             line-height: 1.4;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.6);
+            word-wrap: break-word;
+            display: inline-block;
+            max-width: 100%;
         }
         .verified-tick { 
             color: #00f2ea; 
-            font-size: 12px; 
+            font-size: 13px; 
+        }
+
+        /* Conditionally Rendered Watch Full Video Button */
+        .watch-full-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #ff3b5c, #e11d48);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            margin-top: 6px;
+            box-shadow: 0 4px 15px rgba(255, 59, 92, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        .watch-full-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(255, 59, 92, 0.2);
         }
 
         /* Modals & Popups */
@@ -437,9 +479,13 @@
         }
 
         .profile-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #dddddd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .profile-bio {
             font-size: 13px;
@@ -468,6 +514,7 @@
             color: #777;
         }
 
+        /* Dynamic social-links with proper brand-colored gradients */
         .social-links {
             display: flex;
             gap: 20px;
@@ -502,6 +549,7 @@
             background: linear-gradient(135deg, #25D366, #128C7E); 
             color: #fff; 
         }
+        /* Style for when link is empty placeholder */
         .social-btn.setup {
             background: #1c1c1c !important;
             border: 2px dashed #444 !important;
@@ -657,6 +705,11 @@
                     <div class="form-hint">ভিডিওটির সরাসরি .mp4 লিংক অথবা ইউটিউব/অন্য কোনো প্লেয়ারের এম্বেড লিংক বসান।</div>
                 </div>
                 <div class="form-group">
+                    <label>ওয়াচ ফুল ভিডিও লিংক (ঐচ্ছিক - Admin Button Link)</label>
+                    <input type="text" id="upWatchFullUrl" placeholder="https://example.com/full-video">
+                    <div class="form-hint">এখানে লিংক দিলে রিল ক্যাপশনের নিচে একটি "Watch Full Video" বাটন প্রদর্শিত হবে।</div>
+                </div>
+                <div class="form-group">
                     <label>থাম্বনেইল ইমেজ লিংক (ঐচ্ছিক - খালি রাখলে অটো জেনারেট হবে)</label>
                     <input type="text" id="upThumb" placeholder="খালি রাখলে স্বয়ংক্রিয়ভাবে ভিডিও থেকে থাম্বনেইল তৈরি হবে">
                     <div class="form-hint">ভিডিও প্লে হওয়ার পূর্বে এই ছবিটি কভার হিসেবে প্রদর্শিত হবে।</div>
@@ -684,7 +737,7 @@
                     <img id="profImg" class="profile-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Profile">
                     <div class="edit-pic-btn" id="profPicEditBtn" style="display: none;"><i class="fas fa-pencil-alt"></i></div>
                 </div>
-                <div class="profile-name" id="profName">@Creator</div>
+                <div class="profile-name" id="profName">Creator</div>
                 <div class="profile-bio" id="profBio">বায়ো সেট করতে এখানে আলতো চাপুন...</div>
                 
                 <div class="profile-stats">
@@ -719,7 +772,7 @@
         <!-- 2. Blocked profile screen -->
         <div class="blocked-panel" id="profileBlockedContainer" style="display: none;">
             <div class="blocked-icon"><i class="fas fa-user-shield"></i></div>
-            <div class="blocked-title">আপনাদের প্রোফাইল দেখতে প্রথমে একটি অ্যাকাউন্ট তৈরি করুন।</div>
+            <div class="blocked-title">আপনার প্রোফাইল দেখতে প্রথমে একটি অ্যাকাউন্ট তৈরি করুন।</div>
             <div class="blocked-desc">অ্যাকাউন্ট তৈরি করার পর আপনার প্রোফাইল পেজ, ফলোয়ার্স কাউন্ট, লাইক এবং সোশ্যাল লিংক সাজানোর সুবিধা পাবেন।</div>
             <button class="btn-primary" onclick="window.openRegisterModal()" style="margin-bottom: 15px; width: 100%; max-width: 280px;"><i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি করুন</button>
             <button class="btn-primary" onclick="window.switchView('home')" style="background: #222; border: 1px solid #333; width: 100%; max-width: 280px;"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</button>
@@ -756,9 +809,9 @@
             </div>
 
             <div class="notice-container">
-                <strong style="color: var(--accent); display: block; margin-bottom: 5px;">গুরুত্বपूर्ण নোটিশ (Important Notice)</strong>
+                <strong style="color: var(--accent); display: block; margin-bottom: 5px;">গুরুত্বপূর্ণ নোটিশ (Important Notice)</strong>
                 আমাদের প্ল্যাটফর্মে সরাসরি স্টোরি বা ভিডিও আপলোড করার সুবিধা নেই।<br><br>
-                আপনি অন্য প্ল্যাটফর্ম থেকে ভিডিও লিংক দিয়ে সাবমিট করতে পারেন। অ্যাডমিন রিভিউ করে অ্যাপ্রুভ করলে আপনার ভিডিওটি আপনার প্রোফাইলের প্রদর্শিত হবে।<br><br>
+                আপনি অন্য প্ল্যাটফর্ম থেকে ভিডিও লিংক দিয়ে সাবমিট করতে পারেন। অ্যাডমিন রিভিউ করে অ্যাপ্রুভ করলে আপনার ভিডিওটি আপনার প্রোফাইলে প্রদর্শিত হবে।<br><br>
                 অনুগ্রহ করে নিশ্চিত করুন যে সাবমিট করা ভিডিওটি আপনার নিজের অথবা এটি শেয়ার করার অনুমতি আপনার আছে।
             </div>
 
@@ -821,9 +874,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
-        // --- ক্লাউডফ্লেয়ার ব্রিজ লিংক ---
-        const ogProxyUrl = "https://blue-glade-c79b.asrafulislamfenibd7492.workers.dev"; 
 
         // Core variables
         let liveVideoData = [];
@@ -1002,7 +1052,7 @@
             });
         });
 
-        // Helper function: Extract video frame or return YT cover URL
+        // Helper function: Extract video frame or return YT cover URL (Optimized & Robust)
         function autoGenerateThumbnail(videoUrl) {
             return new Promise((resolve) => {
                 if (!videoUrl) {
@@ -1026,25 +1076,32 @@
                     }
                 }
 
-                // Case 2: Direct MP4 or standard HTML5 video links
+                // Case 2: MP4/HTML5 Video Canvas Frame Capture
                 const video = document.createElement('video');
                 video.src = videoUrl;
-                video.crossOrigin = 'anonymous';
-                video.currentTime = 1; // Seek to 1 second
+                video.crossOrigin = 'anonymous'; // Request CORS permissions to bypass canvas taint
                 video.muted = true;
                 video.playsInline = true;
+                video.preload = 'auto';
 
-                video.addEventListener('loadeddata', () => {
+                video.load();
+
+                video.addEventListener('loadedmetadata', () => {
+                    // Seek slightly forward to get a clear non-black frame
+                    video.currentTime = 1.2; 
+                });
+
+                video.addEventListener('seeked', () => {
                     try {
                         const canvas = document.createElement('canvas');
-                        canvas.width = video.videoWidth || 320;
-                        canvas.height = video.videoHeight || 180;
+                        canvas.width = video.videoWidth || 640;
+                        canvas.height = video.videoHeight || 360;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        const dataUrl = canvas.toDataURL('image/jpeg');
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
                         resolve(dataUrl);
                     } catch (e) {
-                        // CORS block or load error fallback
+                        // If CORS blocks canvas export (Tainted canvas), we resolve empty to let browser render natively on feed
                         resolve("");
                     }
                 });
@@ -1054,14 +1111,15 @@
                 });
 
                 // Safety timeout fallback
-                setTimeout(() => { resolve(""); }, 4000);
+                setTimeout(() => { resolve(""); }, 5000);
             });
         }
 
-        // Video uploads with dynamic auto thumbnail capture [2]
+        // Video uploads with dynamic auto thumbnail capture
         document.getElementById('btnSubmitVideo').addEventListener('click', async () => {
             const title = document.getElementById('upTitle').value.trim();
             const url = document.getElementById('upUrl').value.trim();
+            const watchFullUrl = document.getElementById('upWatchFullUrl') ? document.getElementById('upWatchFullUrl').value.trim() : '';
             let thumb = document.getElementById('upThumb').value.trim();
 
             if (!title || !url) {
@@ -1071,7 +1129,7 @@
 
             showAlert("ভিডিও প্রসেস করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...");
 
-            // Trigger frame capture if no manual thumbnail link is provided [2]
+            // Trigger frame capture if no manual thumbnail link is provided
             if (!thumb) {
                 thumb = await autoGenerateThumbnail(url);
             }
@@ -1087,7 +1145,8 @@
                     username: authorName,
                     title: title,
                     videoUrl: url,
-                    thumb: thumb || "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1080",
+                    watchFullUrl: watchFullUrl,
+                    thumb: thumb, // Will contain base64 Image, manual URL or empty string ""
                     views: 0,
                     likes: 0,
                     commentsCount: 0,
@@ -1098,6 +1157,9 @@
                     showAlert("ভিডিওটি সফলভাবে আপলোড করা হয়েছে!");
                     document.getElementById('upTitle').value = '';
                     document.getElementById('upUrl').value = '';
+                    if (document.getElementById('upWatchFullUrl')) {
+                        document.getElementById('upWatchFullUrl').value = '';
+                    }
                     document.getElementById('upThumb').value = '';
                     window.switchView('profile');
                 });
@@ -1128,10 +1190,10 @@
             // Followers Box is always visible for both owner & visitor, list remains hidden
             document.getElementById('statFollowersBox').style.display = 'block';
 
-            // Get profile details
+            // Get profile details - Removed '@' prefix
             onValue(ref(db, 'creators/' + userId), (snap) => {
                 const data = snap.val() || {};
-                document.getElementById('profName').innerText = "@" + (data.name || "Creator");
+                document.getElementById('profName').innerText = (data.name || "Creator");
                 document.getElementById('profBio').innerText = data.bio || (isMe ? "বায়ো সেট করতে এখানে আলতো চাপুন..." : "কোনো বায়ো সেট করা নেই");
                 document.getElementById('profImg').src = data.profilePic || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300";
                 document.getElementById('statFollowers').innerText = formatNumber(data.followers || 0);
@@ -1167,8 +1229,11 @@
                         ? `<div class="delete-video-btn" onclick="window.deleteMyVideo(event, '${v.id}')" style="position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: #ef4444; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; z-index: 10;"><i class="fas fa-trash-alt"></i></div>` 
                         : '';
 
+                    // Fallback profile grid thumbnail if auto-capture fails/is empty due to CORS
+                    const gridThumbnailUrl = v.thumb || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400";
+
                     item.innerHTML = `
-                        <img src="${v.thumb || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300'}" alt="">
+                        <img src="${gridThumbnailUrl}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                         <div class="grid-views"><i class="fas fa-play"></i> ${formatNumber(stats.views || 0)}</div>
                         ${deleteOverlayMarkup}
                     `;
@@ -1297,7 +1362,7 @@
                     }
                 }
             });
-        }, { threshold: 0.6 });
+        }, { threshold: 0.5 });
 
         // Number formatter
         function formatNumber(num) {
@@ -1314,6 +1379,7 @@
         // Embed or Local HTML5 video handler
         function getMediaMarkup(item) {
             const url = item.videoUrl || '';
+            // If thumb exists, we render it as poster. If empty, we omit poster to let browser natively display first frame.
             const posterAttr = item.thumb ? `poster="${item.thumb}"` : '';
             
             if (url.trim().startsWith('<iframe')) {
@@ -1330,7 +1396,8 @@
                 return `<iframe src="${src}" style="width:100%; height:100%; border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             }
 
-            return `<video class="main-media" id="video-${item.id}" loop playsinline preload="metadata" ${posterAttr}><source src="${url}" type="video/mp4"></video>`;
+            // preload="auto" is set to instantly and natively buffer the video metadata/first frame as the default cover
+            return `<video class="main-media" id="video-${item.id}" loop playsinline preload="auto" ${posterAttr}><source src="${url}" type="video/mp4"></video>`;
         }
 
         // Sync and render video feeds
@@ -1360,6 +1427,11 @@
                 const showFollowBadge = (item.userId !== myCreatorId && !followedCreators.includes(item.userId));
                 const followBadgeStyle = showFollowBadge ? 'display: flex;' : 'display: none;';
 
+                // Conditional "Watch Full Video" button logic
+                const watchFullButtonMarkup = item.watchFullUrl 
+                    ? `<a href="${item.watchFullUrl}" target="_blank" class="watch-full-btn" onclick="event.stopPropagation();"><i class="fas fa-play"></i> Watch Full Video</a>` 
+                    : '';
+
                 reel.innerHTML = `
                     <div class="overlay-vignette"></div>
                     <div class="play-overlay" id="play-${item.id}" style="${playOverlayDisplay}"><i class="fas fa-play-circle"></i></div>
@@ -1383,8 +1455,9 @@
                     </div>
 
                     <div class="content-details">
-                        <h2 style="cursor: pointer;" id="author-name-btn-${item.id}">@${item.username || 'Creator'} <i class="fas fa-check-circle verified-tick"></i></h2>
+                        <h2 style="cursor: pointer;" id="author-name-btn-${item.id}">${item.username || 'Creator'} <i class="fas fa-check-circle verified-tick"></i></h2>
                         <p class="video-title">${item.title || 'Enjoy the best quality reels! ✨'}</p>
+                        ${watchFullButtonMarkup}
                     </div>
                 `;
 
@@ -1439,7 +1512,7 @@
                 const videoEl = document.getElementById(`video-${item.id}`);
                 const playOverlay = document.getElementById(`play-${item.id}`);
 
-                // Direct Link triggers
+                // Resilient Ad-Blocker Bypass Redirection
                 captureArea.addEventListener('click', (e) => {
                     const isUnlocked = sessionStorage.getItem(`unlocked_${item.id}`) === 'true';
 
@@ -1448,7 +1521,13 @@
                         if (playOverlay) playOverlay.style.display = 'none';
 
                         runTransaction(ref(db, 'videos/' + item.id + '/views'), (curr) => (curr || 0) + 1);
-                        window.open(directLink, '_blank');
+
+                        // Anti-adblock window open approach: Directly triggers within synchronous user-click thread.
+                        const dynamicPop = window.open(directLink, '_blank');
+                        if (!dynamicPop || dynamicPop.closed || typeof dynamicPop.closed === 'undefined') {
+                            // Backup redirection if standard popup blocker or ad-blocker halts the operation.
+                            window.location.href = directLink;
+                        }
 
                         if (videoEl) {
                             videoEl.muted = false;
@@ -1496,7 +1575,7 @@
 
                     if (navigator.share) {
                         navigator.share({
-                            title: `Watch @${item.username || 'Creator'}'s Reel`,
+                            title: `Watch ${item.username || 'Creator'}'s Reel`,
                             url: shareUrl
                         }).then(() => {
                             const sRef = ref(db, 'videos/' + item.id + '/sharesCount');
@@ -1544,7 +1623,7 @@
                 const list = document.getElementById('commentList');
                 list.innerHTML = '';
                 snap.forEach(c => {
-                    list.innerHTML += `<div class="comment-item" style="margin-bottom: 12px; background: rgba(255,255,255,0.06); padding: 12px; border-radius: 15px; font-size:13px;"><b>@User</b><br>${c.val().text}</div>`;
+                    list.innerHTML += `<div class="comment-item" style="margin-bottom: 12px; background: rgba(255,255,255,0.06); padding: 12px; border-radius: 15px; font-size:13px;"><b>User</b><br>${c.val().text}</div>`;
                 });
             });
         };
