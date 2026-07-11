@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-
-    <meta name="google-site-verification" content="y20576UCWPcawxpsEY2JQg2EvOVdi6canLpFWt6zvgY" />
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -142,7 +140,7 @@
             width: 100%; 
             padding: 18px 20px;
             display: flex; 
-            justify-content: flex-start; 
+            justify-content: space-between; 
             align-items: center; 
             z-index: 1000; 
             background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
@@ -438,6 +436,25 @@
             transform: scale(0.98);
         }
 
+        /* Language Toggle Button Style */
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .lang-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
         /* Profile Layout */
         .profile-wrapper {
             height: 100%;
@@ -682,9 +699,12 @@
     <!-- Alerts Container -->
     <div id="alertToast" class="alert-toast"></div>
 
-    <!-- Top Navigation for Logo -->
+    <!-- Top Navigation for Logo & Language Toggle -->
     <div class="top-nav">
         <h1 id="logoHeader">Sex Reels</h1>
+        <button id="langToggleBtn" class="lang-btn" onclick="window.toggleLanguage()">
+            <i class="fas fa-globe"></i> <span>English</span>
+        </button>
     </div>
 
     <!-- VIEW: Home (Feed) -->
@@ -696,38 +716,44 @@
     <section id="uploadView" class="view-section">
         <!-- 1. Normal upload form container (Shown if user is approved) -->
         <div class="profile-wrapper" id="uploadFormContainer" style="display: none;">
-            <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">নতুন ভিডিও আপলোড করুন</h2>
+            
+            <!-- Uploading Tutorial Button -->
+            <button class="btn-primary" id="btnTutorial" onclick="window.openTutorial()" style="background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 22px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+                <i class="fas fa-play-circle"></i> <span id="txtTutorialBtn">আপলোডিং টিউটোরিয়াল</span>
+            </button>
+
+            <h2 id="txtUploadTitle" style="font-size: 20px; font-weight: 900; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px;">নতুন ভিডিও আপলোড করুন</h2>
             <div>
                 <div class="form-group">
-                    <label>ভিডিওর টাইটেল / ক্যাপশন</label>
+                    <label id="lblUpTitle">ভিডিওর টাইটেল / ক্যাপশন</label>
                     <input type="text" id="upTitle" placeholder="দারুণ কিছু লিখুন...">
                 </div>
                 <div class="form-group">
-                    <label>ভিডিও লিংক (Direct Video/YouTube Embed/MP4)</label>
+                    <label id="lblUpUrl">ভিডিও লিংক (Direct Video/YouTube Embed/MP4)</label>
                     <input type="text" id="upUrl" placeholder="https://example.com/video.mp4">
-                    <div class="form-hint">ভিডিওটির সরাসরি .mp4 লিংক অথবা ইউটিউব/অন্য কোনো প্লেয়ারের এম্বেড লিংক বসান।</div>
+                    <div class="form-hint" id="hintUpUrl">ভিডিওটির সরাসরি .mp4 লিংক অথবা ইউটিউব/অন্য কোনো প্লেয়ারের এম্বেড লিংক বসান।</div>
                 </div>
                 <div class="form-group">
-                    <label>ওয়াচ ফুল ভিডিও লিংক (ঐচ্ছিক - Admin Button Link)</label>
+                    <label id="lblUpWatchFull">ওয়াচ ফুল ভিডিও লিংক (ঐচ্ছিক - Admin Button Link)</label>
                     <input type="text" id="upWatchFullUrl" placeholder="https://example.com/full-video">
-                    <div class="form-hint">এখানে লিংক দিলে রিল ক্যাপশনের নিচে একটি "Watch Full Video" বাটন প্রদর্শিত হবে।</div>
+                    <div class="form-hint" id="hintUpWatchFull">এখানে লিংক দিলে রিল ক্যাপশনের নিচে একটি "Watch Full Video" বাটন প্রদর্শিত হবে।</div>
                 </div>
                 <div class="form-group">
-                    <label>থাম্বনেইল ইমেজ লিংক (ঐচ্ছিক - খালি রাখলে অটো জেনারেট হবে)</label>
+                    <label id="lblUpThumb">থাম্বনেইল ইমেজ লিংক (ঐচ্ছিক - খালি রাখলে অটো জেনারেট হবে)</label>
                     <input type="text" id="upThumb" placeholder="খালি রাখলে স্বয়ংক্রিয়ভাবে ভিডিও থেকে থাম্বনেইল তৈরি হবে">
-                    <div class="form-hint">ভিডিও প্লে হওয়ার পূর্বে এই ছবিটি কভার হিসেবে প্রদর্শিত হবে।</div>
+                    <div class="form-hint" id="hintUpThumb">ভিডিও প্লে হওয়ার পূর্বে এই ছবিটি কভার হিসেবে প্রদর্শিত হবে।</div>
                 </div>
-                <button class="btn-primary" id="btnSubmitVideo" style="margin-top: 10px;"><i class="fas fa-cloud-upload-alt"></i> ভিডিও পোস্ট করুন</button>
+                <button class="btn-primary" id="btnSubmitVideo" style="margin-top: 10px;"><i class="fas fa-cloud-upload-alt"></i> <span id="txtBtnSubmit">ভিডিও পোস্ট করুন</span></button>
             </div>
         </div>
 
         <!-- 2. Blocked container for non-registered users (Shown if NOT approved) -->
         <div class="blocked-panel" id="uploadBlockedContainer" style="display: none;">
             <div class="blocked-icon"><i class="fas fa-lock"></i></div>
-            <div class="blocked-title">ভিডিও আপলোড করতে আপনাকে প্রথমে একটি অ্যাকাউন্ট তৈরি করতে হবে।</div>
-            <div class="blocked-desc">অ্যাকাউন্ট তৈরি করার পর আপনি সহজেই আপনার পছন্দের ভিডিও লিংক শেয়ার করতে পারবেন এবং নিজের প্রোফাইল কাস্টমাইজ করতে পারবেন।</div>
-            <button class="btn-primary" onclick="window.openRegisterModal()" style="margin-bottom: 15px; width: 100%; max-width: 280px;"><i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি করুন</button>
-            <button class="btn-primary" onclick="window.switchView('home')" style="background: #222; border: 1px solid #333; width: 100%; max-width: 280px;"><i class="fas fa-home"></i>  হোম পেজে ফিরে যান</button>
+            <div class="blocked-title" id="txtUpBlockedTitle">ভিডিও আপলোড করতে আপনাকে প্রথমে একটি অ্যাকাউন্ট তৈরি করতে হবে।</div>
+            <div class="blocked-desc" id="txtUpBlockedDesc">অ্যাকাউন্ট তৈরি করার পর আপনি সহজেই আপনার পছন্দের ভিডিও লিংক শেয়ার করতে পারবেন এবং নিজের প্রোফাইল কাস্টমাইজ করতে পারবেন।</div>
+            <button class="btn-primary" id="btnUpBlockedReg" onclick="window.openRegisterModal()" style="margin-bottom: 15px; width: 100%; max-width: 280px;"><i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি করুন</button>
+            <button class="btn-primary" id="btnUpBlockedHome" onclick="window.switchView('home')" style="background: #222; border: 1px solid #333; width: 100%; max-width: 280px;"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</button>
         </div>
     </section>
 
@@ -744,18 +770,18 @@
                 <div class="profile-bio" id="profBio">বায়ো সেট করতে এখানে আলতো চাপুন...</div>
                 
                 <div class="profile-stats">
-                    <!-- Always visible followers box (owner and visitors can both see, but list is hidden) -->
+                    <!-- Always visible followers box -->
                     <div class="stat-item" id="statFollowersBox">
                         <div class="stat-num" id="statFollowers">0</div>
-                        <div class="stat-label">ফলোয়ার্স</div>
+                        <div class="stat-label" id="lblStatFollowers">ফলোয়ার্স</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-num" id="statLikes">0</div>
-                        <div class="stat-label">লাভ রিয়্যাক্ট</div>
+                        <div class="stat-label" id="lblStatLikes">লাভ রিয়্যাক্ট</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-num" id="statViews">0</div>
-                        <div class="stat-label">মোট ভিউজ</div>
+                        <div class="stat-label" id="lblStatViews">মোট ভিউজ</div>
                     </div>
                 </div>
 
@@ -766,7 +792,13 @@
                 </div>
             </div>
 
-            <div class="profile-grid-title">আপলোড করা ভিডিও সমূহ</div>
+            <!-- Adsterra Native Banner (Safe Spot - Keeps Scrolling perfectly Smooth) -->
+            <div class="native-banner-container" style="margin: 15px auto; width: 100%; text-align: center; overflow: hidden; background: #111; border-radius: 12px; padding: 10px 0;">
+                <script async="async" data-cfasync="false" src="https://pl30307165.effectivecpmnetwork.com/ac6f7630072d66168ea302f30f01b847/invoke.js"></script>
+                <div id="container-ac6f7630072d66168ea302f30f01b847"></div>
+            </div>
+
+            <div class="profile-grid-title" id="txtUploadedVideos">আপলোড করা ভিডিও সমূহ</div>
             <div class="video-grid" id="profileVideoGrid">
                 <!-- User's uploaded videos list -->
             </div>
@@ -775,60 +807,71 @@
         <!-- 2. Blocked profile screen -->
         <div class="blocked-panel" id="profileBlockedContainer" style="display: none;">
             <div class="blocked-icon"><i class="fas fa-user-shield"></i></div>
-            <div class="blocked-title">আপনার প্রোফাইল দেখতে প্রথমে একটি অ্যাকাউন্ট তৈরি করুন।</div>
-            <div class="blocked-desc">অ্যাকাউন্ট তৈরি করার পর আপনার প্রোফাইল পেজ, ফলোয়ার্স কাউন্ট, লাইক এবং সোশ্যাল লিংক সাজানোর সুবিধা পাবেন।</div>
-            <button class="btn-primary" onclick="window.openRegisterModal()" style="margin-bottom: 15px; width: 100%; max-width: 280px;"><i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি করুন</button>
-            <button class="btn-primary" onclick="window.switchView('home')" style="background: #222; border: 1px solid #333; width: 100%; max-width: 280px;"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</button>
+            <div class="blocked-title" id="txtProfBlockedTitle">আপনার প্রোফাইল দেখতে প্রথমে একটি অ্যাকাউন্ট তৈরি করুন।</div>
+            <div class="blocked-desc" id="txtProfBlockedDesc">অ্যাকাউন্ট তৈরি করার পর আপনার প্রোফাইল পেজ, ফলোয়ার্স কাউন্ট, লাইক এবং সোশ্যাল লিংক সাজানোর সুবিধা পাবেন।</div>
+            <button class="btn-primary" id="btnProfBlockedReg" onclick="window.openRegisterModal()" style="margin-bottom: 15px; width: 100%; max-width: 280px;"><i class="fas fa-user-plus"></i> অ্যাকাউন্ট তৈরি করুন</button>
+            <button class="btn-primary" id="btnProfBlockedHome" onclick="window.switchView('home')" style="background: #222; border: 1px solid #333; width: 100%; max-width: 280px;"><i class="fas fa-home"></i> হোম পেজে ফিরে যান</button>
         </div>
     </section>
 
     <!-- Bottom Navigation Tabs -->
     <div class="bottom-nav">
-        <div class="nav-tab active" data-target="home"><i class="fas fa-home"></i>হোম</div>
-        <div class="nav-tab" data-target="upload"><i class="fas fa-plus-circle"></i>আপলোড</div>
-        <div class="nav-tab" data-target="profile"><i class="fas fa-user-circle"></i>প্রোফাইল</div>
+        <div class="nav-tab active" data-target="home"><i class="fas fa-home"></i><span id="tabHome">হোম</span></div>
+        <div class="nav-tab" data-target="upload"><i class="fas fa-plus-circle"></i><span id="tabUpload">আপলোড</span></div>
+        <div class="nav-tab" data-target="profile"><i class="fas fa-user-circle"></i><span id="tabProfile">প্রোফাইল</span></div>
+    </div>
+
+    <!-- Uploading Tutorial Modal -->
+    <div class="modal-overlay" id="tutorialModal">
+        <div class="modal-card">
+            <div style="position: absolute; top: 15px; right: 20px; font-size: 20px; cursor: pointer; color: #888;" onclick="window.closeTutorial()"><i class="fas fa-times"></i></div>
+            <h2 id="txtTutModalTitle" style="font-size: 20px; font-weight: 900; color: var(--accent); margin-bottom: 12px; border-bottom: 1px solid #222; padding-bottom: 8px;">ভিডিও আপলোডিং টিউটোরিয়াল</h2>
+            
+            <div id="tutModalBody" style="font-size: 13px; line-height: 1.6; color: #ccc; max-height: 55vh; overflow-y: auto; padding-right: 5px;">
+                <!-- Content will dynamically update according to language selection -->
+            </div>
+            
+            <button class="btn-primary" onclick="window.closeTutorial()" style="margin-top: 15px;"><span id="txtTutCloseBtn">বুঝেছি / Close</span></button>
+        </div>
     </div>
 
     <!-- Registration & Review Form Modal -->
     <div class="modal-overlay" id="registerModal">
         <div class="modal-card">
-            <!-- Close icon on top-right to exit the modal easily and return home -->
             <div style="position: absolute; top: 15px; right: 20px; font-size: 20px; cursor: pointer; color: #888;" onclick="window.closeRegisterModal()"><i class="fas fa-times"></i></div>
 
-            <h2 style="font-size: 20px; font-weight: 900; color: var(--accent); margin-bottom: 5px;">ক্রিয়েটর অ্যাকাউন্ট তৈরি করুন</h2>
-            <p style="font-size: 13px; color: #888; margin-bottom: 20px;">Creator Account Registration</p>
+            <h2 id="txtRegModalTitle" style="font-size: 20px; font-weight: 900; color: var(--accent); margin-bottom: 5px;">ক্রিয়েটর অ্যাকাউন্ট তৈরি করুন</h2>
+            <p id="txtRegModalSub" style="font-size: 13px; color: #888; margin-bottom: 20px;">Creator Account Registration</p>
             
             <div class="form-group">
-                <label>আপনার পূর্ণ নাম (Full Name)</label>
+                <label id="lblRegName">আপনার পূর্ণ নাম (Full Name)</label>
                 <input type="text" id="regName" placeholder="পূর্ণ নাম লিখুন">
             </div>
             <div class="form-group">
-                <label>প্ল্যাটফর্মের নাম (Platform Name)</label>
+                <label id="lblRegPlatform">প্ল্যাটফর্মের নাম (Platform Name)</label>
                 <input type="text" id="regPlatform" placeholder="যেমন: WhatsApp, Telegram, Facebook ইত্যাদি">
             </div>
             <div class="form-group">
-                <label>চ্যানেল / গ্রুপ লিংক (ঐচ্ছিক) (Channel Link)</label>
+                <label id="lblRegGroupLink">চ্যানেল / গ্রুপ লিংক (ঐচ্ছিক) (Channel Link)</label>
                 <input type="text" id="regGroupLink" placeholder="গ্রুপ বা চ্যানেলের লিংক">
             </div>
 
             <div class="notice-container">
-                <strong style="color: var(--accent); display: block; margin-bottom: 5px;">গুরুত্বপূর্ণ নোটিশ (Important Notice)</strong>
-                আমাদের প্ল্যাটফর্মে সরাসরি স্টোরি বা ভিডিও আপলোড করার সুবিধা নেই।<br><br>
-                আপনি অন্য প্ল্যাটফর্ম থেকে ভিডিও লিংক দিয়ে সাবমিট করতে পারেন। অ্যাডমিন রিভিউ করে অ্যাপ্রুভ করলে আপনার ভিডিওটি আপনার প্রোফাইলে প্রদর্শিত হবে।<br><br>
-                অনুগ্রহ করে নিশ্চিত করুন যে সাবমিট করা ভিডিওটি আপনার নিজের অথবা এটি শেয়ার করার অনুমতি আপনার আছে।
+                <strong id="lblRegNoticeTitle" style="color: var(--accent); display: block; margin-bottom: 5px;">গুরুত্বপূর্ণ নোটিশ (Important Notice)</strong>
+                <span id="txtRegNoticeDesc">আমাদের প্ল্যাটফর্মে সরাসরি স্টোরি বা ভিডিও আপলোড করার সুবিধা নেই।<br><br>আপনি অন্য প্ল্যাটফর্ম থেকে ভিডিও লিংক দিয়ে সাবমিট করতে পারেন। অ্যাডমিন রিভিউ করে অ্যাপ্রুভ করলে আপনার ভিডিওটি আপনার প্রোফাইলে প্রদর্শিত হবে।<br><br>অনুগ্রহ করে নিশ্চিত করুন যে সাবমিট করা ভিডিওটি আপনার নিজের অথবা এটি শেয়ার করার অনুমতি আপনার আছে।</span>
             </div>
 
             <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px;">
                 <input type="checkbox" id="regCheck" style="margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent);">
-                <label for="regCheck" style="font-size: 12px; color: #ccc; cursor: pointer; line-height: 1.4;">আমি রিভিউ প্রক্রিয়া এবং প্ল্যাটফর্মের নির্দেশনাবলী বুঝতে পেরেছি এবং এতে সম্মত আছি।</label>
+                <label for="regCheck" id="lblRegCheck" style="font-size: 12px; color: #ccc; cursor: pointer; line-height: 1.4;">আমি রিভিউ প্রক্রিয়া এবং প্ল্যাটফর্মের নির্দেশনাবলী বুঝতে পেরেছি এবং এতে সম্মত আছি।</label>
             </div>
 
             <div class="notice-container" style="background: rgba(255,255,255,0.02); border-color: #333; margin-bottom: 20px;">
-                <strong style="display: block; margin-bottom: 5px; color: #fff;">রিভিউ প্রক্রিয়া (Review Process)</strong>
-                এই ফর্মটি সাবমিট করলেই অ্যাকাউন্ট সরাসরি তৈরি হবে না। আপনার তথ্য ম্যানুয়াল রিভিউর জন্য পাঠানো হবে। অ্যাডমিন অ্যাপ্রুভ করলে আপনার অ্যাকাউন্টটি সক্রিয় হবে।
+                <strong id="lblReviewProcessTitle" style="display: block; margin-bottom: 5px; color: #fff;">রিভিউ প্রক্রিয়া (Review Process)</strong>
+                <span id="txtReviewProcessDesc">এই ফর্মটি সাবমিট করলেই অ্যাকাউন্ট সরাসরি তৈরি হবে না। আপনার তথ্য ম্যানুয়াল রিভিউর জন্য পাঠানো হবে। অ্যাডমিন অ্যাপ্রুভ করলে আপনার অ্যাকাউন্টটি সক্রিয় হবে।</span>
             </div>
 
-            <button class="btn-primary" id="btnSubmitApp" style="margin-bottom: 12px;">আবেদন সাবমিট করুন</button>
+            <button class="btn-primary" id="btnSubmitApp" style="margin-bottom: 12px;"><span id="txtRegSubmitBtn">আবেদন সাবমিট করুন</span></button>
             <div style="text-align: center;">
                 <span id="btnSelfApprove" style="font-size: 11px; color: #555; text-decoration: underline; cursor: pointer;">ইনস্ট্যান্ট অ্যাপ্রুভ (পরীক্ষামূলক ও টেস্টিং এর জন্য)</span>
             </div>
@@ -880,7 +923,10 @@
 
         // Core variables
         let liveVideoData = [];
-        const directLink = "https://otieu.com/4/10544093";
+        
+        // Replaced old redirection link with your new Adsterra Smartlink
+        const directLink = "https://www.effectivecpmnetwork.com/xam9he8h5?key=fd6a7d2449cbe5202561edfa9f7567d0";
+        
         const userLikedVideos = new Set();
         let currentVideoId = "";
 
@@ -888,6 +934,242 @@
         let myCreatorId = localStorage.getItem('creatorId') || "";
         let isApproved = localStorage.getItem('creatorApproved') === 'true';
         let currentViewingProfileId = ""; // Which profile we are currently looking at
+
+        // Bilingual Translation Dictionary
+        let currentLang = localStorage.getItem('appLanguage') || 'bn';
+
+        const translationData = {
+            bn: {
+                langToggleBtn: "English",
+                tabHome: "হোম",
+                tabUpload: "আপলোড",
+                tabProfile: "প্রোফাইল",
+                logoHome: "Sex Reels",
+                logoUpload: "নতুন ভিডিও",
+                logoProfile: "প্রোফাইল",
+                txtTutorialBtn: "আপলোডিং টিউটোরিয়াল",
+                txtUploadTitle: "নতুন ভিডিও আপলোড করুন",
+                lblUpTitle: "ভিডিওর টাইটেল / ক্যাপশন",
+                upTitlePlaceholder: "দারুণ কিছু লিখুন...",
+                lblUpUrl: "ভিডিও লিংক (Direct Video/YouTube Embed/MP4)",
+                upUrlPlaceholder: "https://example.com/video.mp4",
+                hintUpUrl: "ভিডিওটির সরাসরি .mp4 লিংক অথবা ইউটিউব/অন্য কোনো প্লেয়ারের এম্বেড লিংক বসান।",
+                lblUpWatchFull: "ওয়াচ ফুল ভিডিও লিংক (ঐচ্ছিক - Admin Button Link)",
+                upWatchFullPlaceholder: "https://example.com/full-video",
+                hintUpWatchFull: "এখানে লিংক দিলে রিল ক্যাপশনের নিচে একটি \"Watch Full Video\" বাটন প্রদর্শিত হবে।",
+                lblUpThumb: "থাম্বনেইল ইমেজ লিংক (ঐচ্ছিক - খালি রাখলে অটো জেনারেট হবে)",
+                upThumbPlaceholder: "খালি রাখলে স্বয়ংক্রিয়ভাবে ভিডিও থেকে থাম্বনেইল তৈরি হবে",
+                hintUpThumb: "ভিডিও প্লে হওয়ার পূর্বে এই ছবিটি কভার হিসেবে প্রদর্শিত হবে।",
+                txtBtnSubmit: "ভিডিও পোস্ট করুন",
+                txtUpBlockedTitle: "ভিডিও আপলোড করতে আপনাকে প্রথমে একটি অ্যাকাউন্ট তৈরি করতে হবে।",
+                txtUpBlockedDesc: "অ্যাকাউন্ট তৈরি করার পর আপনি সহজেই আপনার পছন্দের ভিডিও লিংক শেয়ার করতে পারবেন এবং নিজের প্রোফাইল কাস্টমাইজ করতে পারবেন।",
+                btnUpBlockedReg: "অ্যাকাউন্ট তৈরি করুন",
+                btnUpBlockedHome: "হোম পেজে ফিরে যান",
+                lblStatFollowers: "ফলোয়ার্স",
+                lblStatLikes: "লাভ রিয়্যাক্ট",
+                lblStatViews: "মোট ভিউজ",
+                txtUploadedVideos: "আপলোড করা ভিডিও সমূহ",
+                txtProfBlockedTitle: "আপনার প্রোফাইল দেখতে প্রথমে একটি অ্যাকাউন্ট তৈরি করুন।",
+                txtProfBlockedDesc: "অ্যাকাউন্ট তৈরি করার পর আপনার প্রোফাইল পেজ, ফলোয়ার্স কাউন্ট, লাইক এবং সোশ্যাল লিংক সাজানোর সুবিধা পাবেন।",
+                btnProfBlockedReg: "অ্যাকাউন্ট তৈরি করুন",
+                btnProfBlockedHome: "হোম পেজে ফিরে যান",
+                txtTutModalTitle: "ভিডিও আপলোডিং টিউটোরিয়াল",
+                txtTutCloseBtn: "বুঝেছি",
+                tutSteps: `
+                    <p style="margin-bottom: 10px;">১. প্রথমে আপনার ভিডিওর জন্য আকর্ষণীয় একটি <b>টাইটেল / ক্যাপশন</b> লিখুন।</p>
+                    <p style="margin-bottom: 10px;">২. আপনার কাঙ্ক্ষিত ভিডিওটির <b>Direct MP4 লিংক</b> (যা সরাসরি .mp4 দিয়ে শেষ হয়) অথবা যেকোনো ইউটিউব/ভিডিও প্লেয়ারের <b>Embed Link</b> এখানে বসান।</p>
+                    <p style="margin-bottom: 10px;">৩. আপনি যদি আপনার অডিয়েন্সকে ফুল ভিডিও দেখাতে চান, তাহলে <b>ওয়াচ ফুল ভিডিও লিংক (Watch Full Link)</b> বক্সে আপনার ডেস্টিনেশন লিংকটি দিন।</p>
+                    <p style="margin-bottom: 10px;">৪. থাম্বনেইলটি অটোমেটিক জেনারেট হবে, তবে আপনি চাইলে নির্দিষ্ট ছবির লিংক থাম্বনেইল বক্সে দিয়ে ভিডিওর কভার সেট করতে পারেন।</p>
+                    <p style="margin-bottom: 10px;">৫. সবশেষে <b>ভিডিও পোস্ট করুন</b> বাটনে ক্লিক করুন। আপনার ভিডিওটি রিভিউর জন্য চলে যাবে এবং অনুমোদিত হলে প্রোফাইলে লাইভ হবে।</p>
+                `,
+                txtRegModalTitle: "ক্রিয়েটর অ্যাকাউন্ট তৈরি করুন",
+                txtRegModalSub: "Creator Account Registration",
+                lblRegName: "আপনার পূর্ণ নাম (Full Name)",
+                lblRegPlatform: "প্ল্যাটফর্মের নাম (Platform Name)",
+                lblRegGroupLink: "চ্যানেল / গ্রুপ লিংক (ঐচ্ছিক) (Channel Link)",
+                lblRegNoticeTitle: "গুরুত্বপূর্ণ নোটিশ (Important Notice)",
+                txtRegNoticeDesc: "আমাদের প্ল্যাটফর্মে সরাসরি স্টোরি বা ভিডিও আপলোড করার সুবিধা নেই।<br><br>আপনি অন্য প্ল্যাটফর্ম থেকে ভিডিও লিংক দিয়ে সাবমিট করতে পারেন। অ্যাডমিন রিভিউ করে অ্যাপ্রুভ করলে আপনার ভিডিওটি আপনার প্রোফাইলে প্রদর্শিত হবে।<br><br>অনুগ্রহ করে নিশ্চিত করুন যে সাবমিট করা ভিডিওটি আপনার নিজের অথবা এটি শেয়ার করার অনুমতি আপনার আছে।",
+                lblRegCheck: "আমি রিভিউ প্রক্রিয়া এবং প্ল্যাটফর্মের নির্দেশনাবলী বুঝতে পেরেছি এবং এতে সম্মত আছি।",
+                lblReviewProcessTitle: "রিভিউ প্রক্রিয়া (Review Process)",
+                txtReviewProcessDesc: "এই ফর্মটি সাবমিট করলেই অ্যাকাউন্ট সরাসরি তৈরি হবে না। আপনার তথ্য ম্যানুয়াল রিভিউর জন্য পাঠানো হবে। অ্যাডমিন অ্যাপ্রুভ করলে আপনার অ্যাকাউন্টটি সক্রিয় হবে।",
+                txtRegSubmitBtn: "আবেদন সাবমিট করুন",
+                alertUploadNeeded: "আপলোড করতে আপনাকে আগে একাউন্ট করতে হবে!",
+                alertProfileNeeded: "প্রোফাইল দেখতে আপনাকে আগে একাউন্ট করতে হবে!",
+                alertTutorialTitle: "কীভাবে ভিডিও আপলোড করবেন?"
+            },
+            en: {
+                langToggleBtn: "বাংলা",
+                tabHome: "Home",
+                tabUpload: "Upload",
+                tabProfile: "Profile",
+                logoHome: "Sex Reels",
+                logoUpload: "New Video",
+                logoProfile: "Profile",
+                txtTutorialBtn: "Uploading Tutorial",
+                txtUploadTitle: "Upload New Video",
+                lblUpTitle: "Video Title / Caption",
+                upTitlePlaceholder: "Write something amazing...",
+                lblUpUrl: "Video Link (Direct Video/YouTube Embed/MP4)",
+                upUrlPlaceholder: "https://example.com/video.mp4",
+                hintUpUrl: "Insert a direct .mp4 video link or a YouTube/other video embed URL.",
+                lblUpWatchFull: "Watch Full Video Link (Optional - Admin Button Link)",
+                upWatchFullPlaceholder: "https://example.com/full-video",
+                hintUpWatchFull: "Adding a link here displays a \"Watch Full Video\" button under the reel.",
+                lblUpThumb: "Thumbnail Image Link (Optional - blank for auto-generate)",
+                upThumbPlaceholder: "Leave blank to auto-generate from video",
+                hintUpThumb: "This cover image will be displayed before the video starts playing.",
+                txtBtnSubmit: "Post Video",
+                txtUpBlockedTitle: "You must create an account first to upload videos.",
+                txtUpBlockedDesc: "Once registered, you can easily share your favorite video links and customize your creator profile.",
+                btnUpBlockedReg: "Create Account",
+                btnUpBlockedHome: "Back to Home",
+                lblStatFollowers: "Followers",
+                lblStatLikes: "Love Reacts",
+                lblStatViews: "Total Views",
+                txtUploadedVideos: "Uploaded Videos",
+                txtProfBlockedTitle: "Please create an account to view your profile.",
+                txtProfBlockedDesc: "After registration, you can customize your profile page, check followers, likes, and update your social links.",
+                btnProfBlockedReg: "Create Account",
+                btnProfBlockedHome: "Back to Home",
+                txtTutModalTitle: "Video Uploading Tutorial",
+                txtTutCloseBtn: "Got it / Close",
+                tutSteps: `
+                    <p style="margin-bottom: 10px;">1. First, enter an eye-catching <b>Title / Caption</b> for your video.</p>
+                    <p style="margin-bottom: 10px;">2. Paste your desired <b>Direct MP4 Link</b> (ends directly in .mp4) or any video player <b>Embed Link</b>.</p>
+                    <p style="margin-bottom: 10px;">3. If you want your audience to view the full clip, input your link in the <b>Watch Full Video Link</b> box.</p>
+                    <p style="margin-bottom: 10px;">4. Thumbnails generate automatically, but you can paste a specific image URL in the cover box if preferred.</p>
+                    <p style="margin-bottom: 10px;">5. Finally, click the <b>Post Video</b> button. Your video goes for review and goes live once approved.</p>
+                `,
+                txtRegModalTitle: "Create Creator Account",
+                txtRegModalSub: "Creator Account Registration",
+                lblRegName: "Your Full Name",
+                lblRegPlatform: "Platform Name",
+                lblRegGroupLink: "Channel / Group Link (Optional)",
+                lblRegNoticeTitle: "Important Notice",
+                txtRegNoticeDesc: "Our platform doesn't support direct native video file storage.<br><br>You submit links from other platforms instead. Once reviewed and approved by the admin, your content goes live under your profile.<br><br>Please ensure you own the copyright or have permission to share the video link.",
+                lblRegCheck: "I understand the manual review process and agree to the platform guidelines.",
+                lblReviewProcessTitle: "Review Process",
+                txtReviewProcessDesc: "Submitting this form does not guarantee instant profile activation. Your details will be manually checked. Once approved, your profile goes live.",
+                txtRegSubmitBtn: "Submit Application",
+                alertUploadNeeded: "You must create an account to upload videos!",
+                alertProfileNeeded: "You must create an account to view profiles!",
+                alertTutorialTitle: "How to upload videos?"
+            }
+        };
+
+        window.toggleLanguage = function() {
+            currentLang = currentLang === 'bn' ? 'en' : 'bn';
+            localStorage.setItem('appLanguage', currentLang);
+            applyLanguage();
+        };
+
+        function applyLanguage() {
+            const data = translationData[currentLang];
+            
+            // Toggle Button Label
+            document.querySelector('#langToggleBtn span').innerText = data.langToggleBtn;
+
+            // Navigation Tabs
+            document.getElementById('tabHome').innerText = data.tabHome;
+            document.getElementById('tabUpload').innerText = data.tabUpload;
+            document.getElementById('tabProfile').innerText = data.tabProfile;
+
+            // Upload section normal view
+            document.getElementById('txtTutorialBtn').innerText = data.txtTutorialBtn;
+            document.getElementById('txtUploadTitle').innerText = data.txtUploadTitle;
+            document.getElementById('lblUpTitle').innerText = data.lblUpTitle;
+            document.getElementById('upTitle').placeholder = data.upTitlePlaceholder;
+            document.getElementById('lblUpUrl').innerText = data.lblUpUrl;
+            document.getElementById('upUrl').placeholder = data.upUrlPlaceholder;
+            document.getElementById('hintUpUrl').innerText = data.hintUpUrl;
+            document.getElementById('lblUpWatchFull').innerText = data.lblUpWatchFull;
+            document.getElementById('upWatchFullUrl').placeholder = data.upWatchFullPlaceholder;
+            document.getElementById('hintUpWatchFull').innerText = data.hintUpWatchFull;
+            document.getElementById('lblUpThumb').innerText = data.lblUpThumb;
+            document.getElementById('upThumb').placeholder = data.upThumbPlaceholder;
+            document.getElementById('hintUpThumb').innerText = data.hintUpThumb;
+            document.getElementById('btnSubmitVideo').querySelector('span').innerText = data.txtBtnSubmit;
+
+            // Upload section blocked view
+            document.getElementById('txtUpBlockedTitle').innerText = data.txtUpBlockedTitle;
+            document.getElementById('txtUpBlockedDesc').innerText = data.txtUpBlockedDesc;
+            document.getElementById('btnUpBlockedReg').innerHTML = `<i class="fas fa-user-plus"></i> ${data.btnUpBlockedReg}`;
+            document.getElementById('btnUpBlockedHome').innerHTML = `<i class="fas fa-home"></i> ${data.btnUpBlockedHome}`;
+
+            // Profile normal view
+            document.getElementById('lblStatFollowers').innerText = data.lblStatFollowers;
+            document.getElementById('lblStatLikes').innerText = data.lblStatLikes;
+            document.getElementById('lblStatViews').innerText = data.lblStatViews;
+            document.getElementById('txtUploadedVideos').innerText = data.txtUploadedVideos;
+
+            // Profile blocked view
+            document.getElementById('txtProfBlockedTitle').innerText = data.txtProfBlockedTitle;
+            document.getElementById('txtProfBlockedDesc').innerText = data.txtProfBlockedDesc;
+            document.getElementById('btnProfBlockedReg').innerHTML = `<i class="fas fa-user-plus"></i> ${data.btnProfBlockedReg}`;
+            document.getElementById('btnProfBlockedHome').innerHTML = `<i class="fas fa-home"></i> ${data.btnProfBlockedHome}`;
+
+            // Uploading Tutorial Modal
+            document.getElementById('txtTutModalTitle').innerText = data.txtTutModalTitle;
+            document.getElementById('txtTutCloseBtn').innerText = data.txtTutCloseBtn;
+
+            // Registration Modal
+            document.getElementById('txtRegModalTitle').innerText = data.txtRegModalTitle;
+            document.getElementById('lblRegName').innerText = data.lblRegName;
+            document.getElementById('lblRegPlatform').innerText = data.lblRegPlatform;
+            document.getElementById('lblRegGroupLink').innerText = data.lblRegGroupLink;
+            document.getElementById('lblRegNoticeTitle').innerText = data.lblRegNoticeTitle;
+            document.getElementById('txtRegNoticeDesc').innerHTML = data.txtRegNoticeDesc;
+            document.getElementById('lblRegCheck').innerText = data.lblRegCheck;
+            document.getElementById('lblReviewProcessTitle').innerText = data.lblReviewProcessTitle;
+            document.getElementById('txtReviewProcessDesc').innerText = data.txtReviewProcessDesc;
+            document.getElementById('txtRegSubmitBtn').innerText = data.txtRegSubmitBtn;
+
+            // Dynamically refresh current page title logo header
+            const activeTab = document.querySelector('.nav-tab.active');
+            if (activeTab) {
+                window.switchView(activeTab.dataset.target, currentViewingProfileId);
+            }
+        }
+
+        // Uploading Tutorial Action (Loads video dynamically from Firebase Settings)
+        window.openTutorial = function() {
+            onValue(ref(db, 'settings/tutorialVideoUrl'), (snap) => {
+                const videoUrl = snap.val() || '';
+                const modalBody = document.getElementById('tutModalBody');
+                
+                if (videoUrl) {
+                    let embedMarkup = '';
+                    if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') || videoUrl.includes('embed')) {
+                        let ytUrl = videoUrl;
+                        if (videoUrl.includes('watch?v=')) {
+                            const ytId = videoUrl.split('v=')[1].split('&')[0];
+                            ytUrl = `https://www.youtube.com/embed/${ytId}`;
+                        } else if (videoUrl.includes('youtu.be/')) {
+                            const ytId = videoUrl.split('youtu.be/')[1].split('?')[0];
+                            ytUrl = `https://www.youtube.com/embed/${ytId}`;
+                        }
+                        embedMarkup = `<iframe src="${ytUrl}" style="width:100%; height:220px; border-radius:10px; border:none; margin-bottom:12px;" allowfullscreen></iframe>`;
+                    } else {
+                        embedMarkup = `<video src="${videoUrl}" controls style="width:100%; max-height:220px; border-radius:10px; margin-bottom:12px; background:#000;" autoplay></video>`;
+                    }
+                    
+                    modalBody.innerHTML = `
+                        ${embedMarkup}
+                        ${translationData[currentLang].tutSteps}
+                    `;
+                } else {
+                    // Fallback to text instructions if no video set by admin
+                    modalBody.innerHTML = translationData[currentLang].tutSteps;
+                }
+                document.getElementById('tutorialModal').classList.add('active');
+            }, { onlyOnce: true });
+        };
+
+        window.closeTutorial = function() {
+            document.getElementById('tutorialModal').classList.remove('active');
+            // Stops video playing on modal close by clearing HTML
+            document.getElementById('tutModalBody').innerHTML = '';
+        };
 
         // Real-time Database approval listener to dynamically sync Admin Approvals in real-time
         if (myCreatorId) {
@@ -926,18 +1208,19 @@
             document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
 
             const logoHeader = document.getElementById('logoHeader');
+            const translation = translationData[currentLang];
 
             if (viewName === 'home') {
                 document.getElementById('homeView').classList.add('active');
                 const t = document.querySelector('.nav-tab[data-target="home"]');
                 if (t) t.classList.add('active');
-                logoHeader.innerText = "Sex Reels";
+                logoHeader.innerText = translation.logoHome;
             } 
             else if (viewName === 'upload') {
                 document.getElementById('uploadView').classList.add('active');
                 const t = document.querySelector('.nav-tab[data-target="upload"]');
                 if (t) t.classList.add('active');
-                logoHeader.innerText = "নতুন ভিডিও";
+                logoHeader.innerText = translation.logoUpload;
 
                 // Handle Blocked State / Form Visibility dynamically
                 if (myCreatorId && isApproved) {
@@ -946,14 +1229,13 @@
                 } else {
                     document.getElementById('uploadFormContainer').style.display = 'none';
                     document.getElementById('uploadBlockedContainer').style.display = 'flex';
-                    showAlert("আপলোড করতে আপনাকে আগে একাউন্ট করতে হবে!");
                 }
             } 
             else if (viewName === 'profile') {
                 document.getElementById('profileView').classList.add('active');
                 const t = document.querySelector('.nav-tab[data-target="profile"]');
                 if (t) t.classList.add('active');
-                logoHeader.innerText = "প্রোফাইল";
+                logoHeader.innerText = translation.logoProfile;
 
                 const targetId = targetProfileId || myCreatorId;
                 currentViewingProfileId = targetId;
@@ -972,7 +1254,6 @@
                     } else {
                         document.getElementById('profileScrollArea').style.display = 'none';
                         document.getElementById('profileBlockedContainer').style.display = 'flex';
-                        showAlert("প্রোফাইল দেখতে আপনাকে আগে একাউন্ট করতে হবে!");
                     }
                 }
             }
@@ -1004,11 +1285,11 @@
             const checked = document.getElementById('regCheck').checked;
 
             if (!name || !platform) {
-                showAlert("অনুগ্রহ করে আপনার নাম এবং প্ল্যাটফর্ম দিন!");
+                showAlert(currentLang === 'bn' ? "অনুগ্রহ করে আপনার নাম এবং প্ল্যাটফর্ম দিন!" : "Please provide your name and platform!");
                 return;
             }
             if (!checked) {
-                showAlert("নোটিশ ও নীতিমালার সাথে একমত হওয়ার টিকবক্সটি পূরণ করুন!");
+                showAlert(currentLang === 'bn' ? "নোটিশ ও নীতিমালার সাথে একমত হওয়ার টিকবক্সটি পূরণ করুন!" : "Please agree to the notices and guidelines!");
                 return;
             }
 
@@ -1025,7 +1306,7 @@
                 status: 'pending',
                 timestamp: Date.now()
             }).then(() => {
-                showAlert("আবেদন জমা হয়েছে! রিভিউ সম্পন্ন হওয়া পর্যন্ত অপেক্ষা করুন।");
+                showAlert(currentLang === 'bn' ? "আবেদন জমা হয়েছে! রিভিউ সম্পন্ন হওয়া পর্যন্ত অপেক্ষা করুন।" : "Application submitted! Please wait for review approval.");
                 document.getElementById('registerModal').classList.remove('active');
                 window.switchView('home');
             }).catch(err => showAlert(err.message));
@@ -1050,7 +1331,7 @@
                 socials: { web: "", telegram: "", whatsapp: "" }
             }).then(() => {
                 document.getElementById('registerModal').classList.remove('active');
-                showAlert("অ্যাকাউন্ট সফলভাবে তৈরি এবং অ্যাপ্রুভ হয়েছে!");
+                showAlert(currentLang === 'bn' ? "অ্যাকাউন্ট সফলভাবে তৈরি এবং অ্যাপ্রুভ হয়েছে!" : "Account created and approved successfully!");
                 window.switchView('profile');
             });
         });
@@ -1126,11 +1407,11 @@
             let thumb = document.getElementById('upThumb').value.trim();
 
             if (!title || !url) {
-                showAlert("টাইটেল এবং ভিডিও লিংক অত্যন্ত আবশ্যক!");
+                showAlert(currentLang === 'bn' ? "টাইটেল এবং ভিডিও লিংক অত্যন্ত আবশ্যক!" : "Title and video URL are absolutely required!");
                 return;
             }
 
-            showAlert("ভিডিও প্রসেস করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...");
+            showAlert(currentLang === 'bn' ? "ভিডিও প্রসেস করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন..." : "Processing video, please wait...");
 
             // Trigger frame capture if no manual thumbnail link is provided
             if (!thumb) {
@@ -1157,7 +1438,7 @@
                 };
 
                 set(ref(db, 'videoList/' + videoId), newVideo).then(() => {
-                    showAlert("ভিডিওটি সফলভাবে আপলোড করা হয়েছে!");
+                    showAlert(currentLang === 'bn' ? "ভিডিওটি সফলভাবে আপলোড করা হয়েছে!" : "Video uploaded successfully!");
                     document.getElementById('upTitle').value = '';
                     document.getElementById('upUrl').value = '';
                     if (document.getElementById('upWatchFullUrl')) {
@@ -1172,11 +1453,15 @@
         // Delete Creator's Own Video (instantly updates total love & views)
         window.deleteMyVideo = (event, videoId) => {
             event.stopPropagation(); // Stop click bubbling
-            if (confirm("আপনি কি নিশ্চিতভাবে এই ভিডিওটি ডিলিট করতে চান? এটি ডিলিট করলে ভিডিওর সমস্ত ভিউ এবং লাইক আপনার প্রোফাইলের মোট কাউন্ট থেকে স্বয়ংক্রিয়ভাবে মাইনাস হয়ে যাবে।")) {
+            const warningMsg = currentLang === 'bn' 
+                ? "আপনি কি নিশ্চিতভাবে এই ভিডিওটি ডিলিট করতে চান? এটি ডিলিট করলে ভিডিওর সমস্ত ভিউ এবং লাইক আপনার প্রোফাইলের মোট কাউন্ট থেকে স্বয়ংক্রিয়ভাবে মাইনাস হয়ে যাবে।" 
+                : "Are you sure you want to delete this video? Deleting this video will automatically subtract its views and likes from your profile count.";
+            
+            if (confirm(warningMsg)) {
                 remove(ref(db, 'videoList/' + videoId)).then(() => {
                     remove(ref(db, 'videos/' + videoId));
                     remove(ref(db, 'comments/' + videoId));
-                    showAlert("ভিডিওটি সফলভাবে ডিলিট করা হয়েছে!");
+                    showAlert(currentLang === 'bn' ? "ভিডিওটি সফলভাবে ডিলিট করা হয়েছে!" : "Video deleted successfully!");
                     renderProfileData(myCreatorId);
                 }).catch(err => showAlert(err.message));
             }
@@ -1197,7 +1482,7 @@
             onValue(ref(db, 'creators/' + userId), (snap) => {
                 const data = snap.val() || {};
                 document.getElementById('profName').innerText = (data.name || "Creator");
-                document.getElementById('profBio').innerText = data.bio || (isMe ? "বায়ো সেট করতে এখানে আলতো চাপুন..." : "কোনো বায়ো সেট করা নেই");
+                document.getElementById('profBio').innerText = data.bio || (isMe ? translationData[currentLang].bioPlaceholder : translationData[currentLang].bioNone);
                 document.getElementById('profImg').src = data.profilePic || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300";
                 document.getElementById('statFollowers').innerText = formatNumber(data.followers || 0);
 
@@ -1272,17 +1557,20 @@
             newBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (isOwner) {
-                    let platformTitle = btnId === 'linkWeb' ? 'ওয়েবসাইট (Website)' : btnId === 'linkTg' ? 'টেলিগ্রাম (Telegram)' : 'হোয়াটসঅ্যাপ (WhatsApp)';
+                    let platformTitle = btnId === 'linkWeb' ? (currentLang === 'bn' ? 'ওয়েবসাইট (Website)' : 'Website') : btnId === 'linkTg' ? (currentLang === 'bn' ? 'টেলিগ্রাম (Telegram)' : 'Telegram') : (currentLang === 'bn' ? 'হোয়াটসঅ্যাপ (WhatsApp)' : 'WhatsApp');
                     let linkPlaceholder = btnId === 'linkWeb' ? 'https://yourwebsite.com' : btnId === 'linkTg' ? 'https://t.me/yourchannel' : 'https://wa.me/yournumber';
                     
-                    // Native mobile-friendly input prompts for 100% reliability
-                    let inputUrl = prompt(`${platformTitle} লিংক যোগ করতে বা পরিবর্তন করতে এখানে পেস্ট করুন:`, url || linkPlaceholder);
+                    let promptTxt = currentLang === 'bn' 
+                        ? `${platformTitle} লিংক যোগ করতে বা পরিবর্তন করতে এখানে পেস্ট করুন:` 
+                        : `Paste your link here to add or update ${platformTitle}:`;
+
+                    let inputUrl = prompt(promptTxt, url || linkPlaceholder);
                     if (inputUrl !== null) {
                         const finalUrl = inputUrl.trim();
                         const path = `creators/${myCreatorId}/socials/${btnId === 'linkWeb' ? 'web' : btnId === 'linkTg' ? 'telegram' : 'whatsapp'}`;
                         
                         set(ref(db, path), finalUrl).then(() => {
-                            showAlert(`${platformTitle} লিংক সফলভাবে আপডেট করা হয়েছে!`);
+                            showAlert(currentLang === 'bn' ? `${platformTitle} লিংক সফলভাবে আপডেট করা হয়েছে!` : `${platformTitle} link successfully updated!`);
                             renderProfileData(myCreatorId);
                         }).catch(err => showAlert(err.message));
                     }
@@ -1290,7 +1578,7 @@
                     if (url) {
                         window.open(url, '_blank');
                     } else {
-                        showAlert("এই ক্রিয়েটরের কোনো লিংক দেওয়া নেই!");
+                        showAlert(currentLang === 'bn' ? "এই ক্রিয়েটরের কোনো লিংক দেওয়া নেই!" : "No custom social link specified by this creator!");
                     }
                 }
             });
@@ -1318,10 +1606,11 @@
 
         document.getElementById('profPicEditBtn').addEventListener('click', () => {
             onValue(ref(db, `creators/${myCreatorId}/profilePic`), (snap) => {
-                openEditor("প্রোফাইল ইমেজ পরিবর্তন করুন", snap.val() || "", (newUrl) => {
+                const modalTitle = currentLang === 'bn' ? "প্রোফাইল ইমেজ পরিবর্তন করুন" : "Change Profile Image";
+                openEditor(modalTitle, snap.val() || "", (newUrl) => {
                     if (newUrl) {
                         set(ref(db, `creators/${myCreatorId}/profilePic`), newUrl).then(() => {
-                            showAlert("ছবি পরিবর্তন করা হয়েছে!");
+                            showAlert(currentLang === 'bn' ? "ছবি পরিবর্তন করা হয়েছে!" : "Profile picture updated successfully!");
                             renderProfileData(myCreatorId);
                         });
                     }
@@ -1332,9 +1621,10 @@
         document.getElementById('profBio').addEventListener('click', () => {
             if (currentViewingProfileId !== myCreatorId) return;
             onValue(ref(db, `creators/${myCreatorId}/bio`), (snap) => {
-                openEditor("আপনার বায়ো এডিট করুন", snap.val() || "", (newBio) => {
+                const modalTitle = currentLang === 'bn' ? "আপনার বায়ো এডিট করুন" : "Edit Your Bio";
+                openEditor(modalTitle, snap.val() || "", (newBio) => {
                     set(ref(db, `creators/${myCreatorId}/bio`), newBio).then(() => {
-                        showAlert("বায়ো আপডেট সম্পন্ন হয়েছে!");
+                        showAlert(currentLang === 'bn' ? "বায়ো আপডেট সম্পন্ন হয়েছে!" : "Bio updated successfully!");
                         renderProfileData(myCreatorId);
                     });
                 });
@@ -1345,6 +1635,13 @@
         document.getElementById('registerModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('registerModal')) {
                 window.closeRegisterModal();
+            }
+        });
+
+        // Close tutorial modal if clicked outside
+        document.getElementById('tutorialModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('tutorialModal')) {
+                window.closeTutorial();
             }
         });
 
@@ -1506,7 +1803,7 @@
                         // Increment Creator followers in DB
                         const fRef = ref(db, `creators/${item.userId}/followers`);
                         runTransaction(fRef, (curr) => (curr || 0) + 1).then(() => {
-                            showAlert("আপনি এই ক্রিয়েটরকে ফলো করেছেন!");
+                            showAlert(currentLang === 'bn' ? "আপনি এই ক্রিয়েটরকে ফলো করেছেন!" : "You followed this creator!");
                         });
                     });
                 }
@@ -1586,7 +1883,7 @@
                         });
                     } else {
                         navigator.clipboard.writeText(shareUrl).then(() => {
-                            showAlert("ভিডিও লিংক কপি করা হয়েছে!");
+                            showAlert(currentLang === 'bn' ? "ভিডিও লিংক কপি করা হয়েছে!" : "Video link copied to clipboard!");
                             const sRef = ref(db, 'videos/' + item.id + '/sharesCount');
                             runTransaction(sRef, (curr) => (curr || 0) + 1);
                         });
@@ -1643,6 +1940,16 @@
                 input.value = '';
             }
         };
+
+        // Initialize translations and trigger default settings on load
+        applyLanguage();
     </script>
+
+    <!-- Adsterra Popunder Code (Loads asynchronously to keep scroll performance perfectly lag-free) -->
+    <script src="https://pl30307166.effectivecpmnetwork.com/78/e9/d6/78e9d615a1cdb0051a24c82a0391e358.js"></script>
+
+    <!-- Adsterra Social Bar Code (Asynchronous floating notification widget) -->
+    <script src="https://pl30307163.effectivecpmnetwork.com/fc/91/63/fc91635ec7e8f4d858145335747.js"></script>
+
 </body>
 </html>
